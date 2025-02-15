@@ -2,7 +2,7 @@
 
 ### About
     
-Using text transformer cli tool, you can transformer any input file into various formats: ascii-drawing, binary, hex, numeric, utf-8.
+Using text transformer cli tool, you can transformer any input file into various formats: ascii-drawing, binary, hex, numeric, utf-8. This is a hobby project to practice C++ in a random project I thought up.
 
 **WARNING:** some translations are **_lossy_** if input file contains incompatible data for the destination formatt. A best-effort attempt is made.
 
