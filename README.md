@@ -10,13 +10,13 @@ Using text transformer cli tool, you can transformer any input file into various
     
 ```
 git clone git@github.com:SummerGautier/text-transformer.git
-clang++ -std=c++20 main.cpp -o ttransform.exe
+clang++ -std=c++20 main.cpp transformConfig.cpp -o ttransform.exe
 # For how to use ttransform look at "Usage"
 ```
 
 ### Usage
      
  ```
- ./ttransform.exe --source my-text.txt --out destination.txt --ascii-draw
+ ./ttransform.exe --src my-text.txt --out destination.txt --ascii-draw
  # use an appropriate output file format [destination.bin, destination.hex, etc.]
  ```
