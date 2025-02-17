@@ -24,17 +24,19 @@ void Help () {
 	return;
 }
 
+struct TransformConfiguration {
+	// input and output files created on the stack.
+	File sourceFile {};
+	File outputFile {};
 
+	// captures output writing TransformConfig.
+	TransformConfig::WriteFormat writeFormat {TransformConfig::WriteFormat::asciiDraw};
+}
 
 int main (int _argCount, char* _argVector[]) {
 
 
-	// input and output files created on the stack.
-	File _sourceFile {};
-	File _outputFile {};
-
-	// captures output writing TransformConfig.
-	TransformConfig::WriteFormat _writeFormat {TransformConfig::WriteFormat::asciiDraw};
+	TransformConfiguration _config {};
 
 	// maximum allowed args is CHAR_MAX = 127,
 	// a fixed limit prevents runaway loops.
@@ -65,12 +67,12 @@ int main (int _argCount, char* _argVector[]) {
 			// read in raw file name.
 			std::string _rawFileName = _argVector[_index];
 			// parse raw file name to update source file.
-			bool _supportedExtension = _sourceFile.ParseRawFileName(_rawFileName);
+			bool _supportedExtension = _config.sourceFile.ParseRawFileName(_rawFileName);
 			if (!_supportedExtension) {
 				// formatt error message with expected file extensions.
 				std::string _message {
 					std::format("Unable to process {} not supported. These are allowed extensions: {}. Use --help for more options.", 
-						_sourceFile.Extension(), File::AllowedExtensions())
+						_config.sourceFile.Extension(), File::AllowedExtensions())
 				};
 
 				throw std::runtime_error(_message);
