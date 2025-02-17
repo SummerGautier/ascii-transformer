@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "transformConfig.h"
+#include "TransformConfig.h"
 
 TransformConfig::WriteFormat TransformConfig::ParseInt (const int _value) {
 	// check if value is above supported range.

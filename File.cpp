@@ -5,7 +5,10 @@ bool File::ParseRawFileName (const std::string _rawFileName) {
 	int _delimiterPos = _rawFileName.find('.');
 	// extract filename and type.
 	std::string _baseName = _rawFileName.substr(0, _delimiterPos);
-	std::string _extension = _rawFileName.substr(1, _delimiterPos);
+
+	// calculate how far to read extension
+	int _extensionCharCount = _rawFileName.size() - _baseName.size() - 1;
+	std::string _extension = _rawFileName.substr(_delimiterPos+1, _extensionCharCount);
 	// verify the filetype is supported.
 	if (VerifySupportedExtension(_extension)) {
 		this->name.baseName = _baseName;
