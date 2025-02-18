@@ -38,3 +38,4 @@ namespace Options {
 	// find smallest enum value for WriteFormat.
 	int MinWriteFormat ();
 };
+

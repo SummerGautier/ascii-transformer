@@ -27,4 +27,4 @@ using namespace ConfigBuilder {
 	Status Formats (const std::string _arg, Config& _configRef);
 	// confirm config data is expected types and ranges.
 	Status ValidateConfig (Config& _configRef);
-}
+};
