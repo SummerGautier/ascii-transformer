@@ -1,7 +1,6 @@
 #include <string>
 
 class File {
-
 	public:
 		// update basename and extension form raw file name.
 		bool ParseRawFileName (const std::string _rawFileName);

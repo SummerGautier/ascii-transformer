@@ -7,7 +7,7 @@
 #include "Config.h"
 #include "ConfiBuilder.h"
 
-bool ConfigBuidler::Build (Config& _configRef) {
+bool ConfigBuidler::Build (Config& _configRef, int _argCount, char* _argVector) {
 	// continue reading args until index reaches arg.
 	for (int _index {0}; _index < _argCount; _index++) {
 
