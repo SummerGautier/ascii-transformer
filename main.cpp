@@ -16,7 +16,7 @@ void Help () {
 		" # OPTIONS: \n"
 		" --src <filename> (required)\n"
 		" [--out <filename>]\n" 
-		" [--transform asciiDraw (default) | hex | binary | utf8]\n"
+		" [--asciiDraw (default) | hex | binary | utf8]\n"
 		" [--help]\n"
 	};
 	// write to console.
@@ -42,7 +42,7 @@ int main (int _argCount, char* _argVector[]) {
 	int _maxAllowedArgs {std::numeric_limits<char>::max()};
 
 	// continue reading args until index reaches arg.
-	for (int _index {0}; _index <= _argCount; _index++) {
+	for (int _index {0}; _index < _argCount; _index++) {
 
 		// ensure we are not running past argument max.
 		if (_index > _maxAllowedArgs) {
@@ -65,7 +65,7 @@ int main (int _argCount, char* _argVector[]) {
 			
 			// check that next arg is available.
 			if (_index+1 >= _argCount) {
-				std::cerr << "Unable to continue. Source file was not provided. Use --help for more options.";
+				std::cerr << "ERROR: Unable to continue. Source file was not provided. Use --help for more options.";
 				return EXIT_FAILURE;
 			}
 			// since next arg is availble, move 'pointer' forward.
@@ -77,14 +77,46 @@ int main (int _argCount, char* _argVector[]) {
 			if (!_supportedExtension) {
 				// formatt error message with expected file extensions.
 				std::string _message {
-					std::format("Unable to process {} not supported. These are allowed extensions: {}. Use --help for more options.", 
-						_config.sourceFile.Extension(), File::AllowedExtensions())
+					std::format("ERROR: Unable to process, supplied source file type not supported.\n These are allowed extensions: {}.\n Use --help for more options.", File::AllowedExtensions())
 				};
 
 				std::cerr << _message;
 				return EXIT_FAILURE;
 			}
 		}
+
+
+				// set source file if it is a source file.
+		if (_arg == "--out") {
+			// check that next arg is available.
+			if (_index+1 >= _argCount) {
+				std::cout << "--out flag was recieved without filename. Use default filename? [Y/n] ";
+				std::string _useDefault {};
+				std::cin >> _useDefault;
+				if (_useDefault == "n") {
+					std::cerr << "Exiting without exception." << std::endl;
+					return EXIT_FAILURE;
+				} 
+				std::cout << "Resuming." << std::endl;
+			} else {
+				// since next arg is availble, move 'pointer' forward.
+				++_index;
+				// read in raw file name.
+				std::string _rawFileName = _argVector[_index];
+				// parse raw file name to update source file.
+				bool _supportedExtension = _config.outputFile.ParseRawFileName(_rawFileName);
+				if (!_supportedExtension) {
+					// formatt error message with expected file extensions.
+					std::string _message {
+						std::format(" ERROR: Unable to process, supplied outpfile type not supported.\n These are allowed extensions: {}.\n Use --help for more options.", File::AllowedExtensions())
+					};
+
+					std::cerr << _message;
+					return EXIT_FAILURE;
+				}
+			}
+		}
+
 
 		// set mode to drawing ascii charachters.
 		if (_arg == "--ascii-draw") {
@@ -108,19 +140,19 @@ int main (int _argCount, char* _argVector[]) {
 	}
 
 	// if source file was not found, except without exception.
-	if (_config.sourceFile.FileName() == " ") {
-		std::cout << "Please provide a source file using --src <filename> \nUse --help for more options." << std::endl;
+	if (_config.sourceFile.FileName() == "") {
+		std::cerr << " ERROR: Please provide a source file using --src <filename>\n Use --help for more options." << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	// if out file is missing, use post-fix on srcfile
-	if (_config.outputFile.FileName() == " ") {
+	if (_config.outputFile.FileName() == "") {
 		std::string _defaultFileName {_config.sourceFile.BaseName() + "-transformed" + _config.sourceFile.Extension()};
 		bool _valid = _config.outputFile.ParseRawFileName(_defaultFileName);
 		if (!_valid) {
-			throw std::logic_error(std::format("Something went wrong, unable to generate default output filename. {} is not supported.", _defaultFileName));
+			throw std::logic_error(std::format(" Something went wrong, unable to generate default output filename.\n {} is not a valid file type.", _defaultFileName));
 		}
-		std::cout << std::format("Using output file name: {}", _config.outputFile.FileName());
+		std::cout << std::format(" Using output file name: {}", _config.outputFile.FileName());
 	}
 
 	return EXIT_SUCCESS;
