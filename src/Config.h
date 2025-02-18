@@ -1,7 +1,9 @@
 #pragma once
-
 #include <vector>
 
+#include "File.h"
+
+// contains the configuration for the program.
 struct Config {
 	// input and output files created on the stack.
 	File sourceFile {};
@@ -13,7 +15,7 @@ struct Config {
 	};
 };
 
-// configuration for the text transformation.
+// options for text transformation.
 namespace Options {
 	// what format to use for output file when transforming text.
 	enum class WriteFormat {
@@ -35,6 +37,4 @@ namespace Options {
 	int MaxWriteFormat ();
 	// find smallest enum value for WriteFormat.
 	int MinWriteFormat ();
-
-
 };

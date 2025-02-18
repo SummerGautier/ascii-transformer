@@ -1,5 +1,9 @@
+#pragma once
 
+#include <string>
+#include "Config.h"
 
+// used to verify and parse cli arguments in config object.
 using namespace ConfigBuilder {
 	// status of each step in config build operation.
 	enum class Status {
@@ -24,5 +28,3 @@ using namespace ConfigBuilder {
 	// confirm config data is expected types and ranges.
 	Status ValidateConfig (Config& _configRef);
 }
-
-

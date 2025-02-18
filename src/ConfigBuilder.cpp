@@ -17,23 +17,19 @@ bool ConfigBuidler::Build (Config& _configRef) {
 			// exit program if help screen was displayed.
 			std::exit();
 		}
-
 		if (Source(_arg, _configRef) == ConfigBuilder::Status::Failed) {
 			// exit program if error processing source file arg.
 			return false;
 		}
-
 		if (Out(_arg, _configRef) == ConfigBuilder::Status::Failed) {
 			//exit program if error processing output file arg.
 			return false;
 		}
-
 		if (Formats(_args, _configRef) == ConfigBuilder::Status::Failed) {
 			// exit program if format could not be set.
 			return false;
 		}
 	}
-
 	// return true of config is valid.
 	return (ValidateConfig(_configRef) == ConfigBuilder::Status::Completed);
 }
@@ -43,7 +39,6 @@ std::string ConfigBuilder::ExtractArg (const int _index, const char* _argVector)
 	if (_index > _ConfigBuilder::MaxAllowedArgs) {
 		throw std::runtime_error("maximum argument count exceeded.");
 	}
-
 	// get current argument.
 	return _argVector[_index];
 }
@@ -63,11 +58,9 @@ ConfigBuilder::Status ConfigBuilder::Help (const std::string& _arg) {
 		};
 		// write to console.
 		std::cout << _helpMessage << '\n';
-
 		// compelted status.
 		return ConfigBuilder::Status::Completed
 	}
-
 	// no activity performed.
 	return ConfigBuilder::Status::None;
 }
@@ -75,8 +68,6 @@ ConfigBuilder::Status ConfigBuilder::Help (const std::string& _arg) {
 ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _configRef) {
 	// set source file if it is a source file.
 	if (_arg == "--src") {
-		// search next argument.
-		
 		// check that next arg is available.
 		if (_index+1 >= _argCount) {
 			std::cerr << "ERROR: Unable to continue. Source file was not provided. Use --help for more options.";
@@ -97,12 +88,9 @@ ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _co
 			std::cerr << _message;
 			return Status::Failed;
 		}
-
 		return ConfigBuilder::Status::Completed;
 	}
-
 	return ConfigBuilder::Status::None;
-
 }
 
 ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _configRef) {
@@ -135,37 +123,30 @@ ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _confi
 				return ConfigBuilder::Status::Failed;
 			}
 		}
-
 		return ConfigBuilder::Status::Completed;
 	}
-
 	return ConfigBuilder::Status::None;
 }
 
 ConfigBuilder::Status ConfigBuilder::Formats (const std::string _arg, Config& _configRef) {
-
 	// set mode to drawing ascii charachters by
 	_configRef.writeFormat = TransformConfig::WriteFormat::asciiDraw;
 	// this if doesn't change function of last line, it's just for symmetry :) 
 	if (_arg == "--ascii-draw") {
 		_configRef.writeFormat = TransformConfig::WriteFormat::asciiDraw;
 	}
-
 	// set mode to writing hexadecimal.
 	if (_arg == "--hex") {
 		_configRef.writeFormat = TransformConfig::WriteFormat::hexadecimal;
 	}
-
 	// set mode to writing binary.
 	if (_arg == "--binary") {
 		_configRef.writeFormat = TransformConfig::WriteFormat::binary;
 	}
-
 	// set mode to writing utf-8.
 	if (_arg == "--utf8") {
 		_configRef.writeFormat = TransformConfig::WriteFormat::utf8;
 	}
-
 	// mode will always be set by default.
 	return ConfigBuilder::Status::Completed;
 }
@@ -176,7 +157,6 @@ ConfigBuilder::Status ConfigBuilder::ValidateConfig (Config& _configRef) {
 		std::cerr << " ERROR: Please provide a source file using --src <filename>\n Use --help for more options." << std::endl;
 		return ConfigBuilder::Status::Failed;
 	}
-
 	// if out file is missing, use post-fix on srcfile
 	if (_configRef.outputFile.FileName() == "") {
 		std::string _defaultFileName {_configRef.sourceFile.BaseName() + "-transformed" + _configRef.sourceFile.Extension()};
@@ -196,6 +176,5 @@ ConfigBuilder::Status ConfigBuilder::ValidateConfig (Config& _configRef) {
 	if (!_configRef.outputFile.VerifySupportedExtension(_configRef.output.Extension())) {
 		return ConfigBuilder::Status::Failed;
 	}
-
 	return ConfigBuilder::Status::Completed;
 }
