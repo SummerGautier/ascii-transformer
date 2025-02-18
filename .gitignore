@@ -2,3 +2,5 @@
 *.exe*
 *.dmg*
 *.config
+**build
+*.DS_Store

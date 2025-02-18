@@ -2,8 +2,19 @@
 
 #include <vector>
 
+struct Config {
+	// input and output files created on the stack.
+	File sourceFile {};
+	File outputFile {};
+
+	// captures output writing TransformConfig.
+	Options::WriteFormat writeFormat {
+		Options::WriteFormat::asciiDraw
+	};
+};
+
 // configuration for the text transformation.
-namespace TransformConfig {
+namespace Options {
 	// what format to use for output file when transforming text.
 	enum class WriteFormat {
 		asciiDraw,
@@ -24,4 +35,6 @@ namespace TransformConfig {
 	int MaxWriteFormat ();
 	// find smallest enum value for WriteFormat.
 	int MinWriteFormat ();
+
+
 };
