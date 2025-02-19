@@ -4,28 +4,28 @@
 #include <cstdint>
 #include <format>
 
-#include "Config.h"
-#include "ConfiBuilder.h"
+#include "Config.hpp"
+#include "ConfigBuilder.hpp"
 
-bool ConfigBuidler::Build (Config& _configRef, int _argCount, char* _argVector) {
+bool ConfigBuilder::Build (Config& _configRef, int _argCount, char* _argVector[]) {
 	// continue reading args until index reaches arg.
 	for (int _index {0}; _index < _argCount; _index++) {
 
 		std::string _arg = ExtractArg(_index, _argVector);
 
-		if (Help(_arg, _configRef) == ConfigBuilder::Status::Completed) {
+		if (Help(_arg) == ConfigBuilder::Status::Completed) {
 			// exit program if help screen was displayed.
-			std::exit();
+			std::exit(EXIT_SUCCESS);
 		}
-		if (Source(_arg, _configRef) == ConfigBuilder::Status::Failed) {
+		if (Source(_arg, _configRef, _index, _argVector, _argCount) == ConfigBuilder::Status::Failed) {
 			// exit program if error processing source file arg.
 			return false;
 		}
-		if (Out(_arg, _configRef) == ConfigBuilder::Status::Failed) {
+		if (Out(_arg, _configRef, _index, _argVector, _argCount) == ConfigBuilder::Status::Failed) {
 			//exit program if error processing output file arg.
 			return false;
 		}
-		if (Formats(_args, _configRef) == ConfigBuilder::Status::Failed) {
+		if (Formats(_arg, _configRef) == ConfigBuilder::Status::Failed) {
 			// exit program if format could not be set.
 			return false;
 		}
@@ -34,16 +34,16 @@ bool ConfigBuidler::Build (Config& _configRef, int _argCount, char* _argVector) 
 	return (ValidateConfig(_configRef) == ConfigBuilder::Status::Completed);
 }
 
-std::string ConfigBuilder::ExtractArg (const int _index, const char* _argVector) {
+std::string ConfigBuilder::ExtractArg (int _index, char* _argVector[]) {
 	// ensure we are not running past argument max.
-	if (_index > _ConfigBuilder::MaxAllowedArgs) {
+	if (_index > ConfigBuilder::MaxAllowedArgs) {
 		throw std::runtime_error("maximum argument count exceeded.");
 	}
 	// get current argument.
 	return _argVector[_index];
 }
 
-ConfigBuilder::Status ConfigBuilder::Help (const std::string& _arg) {
+ConfigBuilder::Status ConfigBuilder::Help (const std::string _arg) {
 	// display help options if help arg sent.
 	if (_arg == "--help") {
 		// generate help message.
@@ -59,18 +59,18 @@ ConfigBuilder::Status ConfigBuilder::Help (const std::string& _arg) {
 		// write to console.
 		std::cout << _helpMessage << '\n';
 		// compelted status.
-		return ConfigBuilder::Status::Completed
+		return ConfigBuilder::Status::Completed;
 	}
 	// no activity performed.
 	return ConfigBuilder::Status::None;
 }
 
-ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _configRef) {
+ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _configRef, int& _index, char* _argVector[], int _argCount) {
 	// set source file if it is a source file.
 	if (_arg == "--src") {
 		// check that next arg is available.
 		if (_index+1 >= _argCount) {
-			std::cerr << "ERROR: Unable to continue. Source file was not provided. Use --help for more options.";
+			std::cerr << "ERROR: Unable to continue. Source file was not provided. Use --help for more options." << std::endl;
 			return ConfigBuilder::Status::Failed;
 		}
 		// since next arg is availble, move 'pointer' forward.
@@ -85,7 +85,7 @@ ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _co
 				std::format("ERROR: Unable to process, supplied source file type not supported.\n These are allowed extensions: {}.\n Use --help for more options.", File::AllowedExtensions())
 			};
 
-			std::cerr << _message;
+			std::cerr << _message << std::endl;
 			return Status::Failed;
 		}
 		return ConfigBuilder::Status::Completed;
@@ -93,7 +93,7 @@ ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _co
 	return ConfigBuilder::Status::None;
 }
 
-ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _configRef) {
+ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _configRef, int& _index, char*_argVector[], int _argCount) {
 	// set source file if it is a source file.
 	if (_arg == "--out") {
 		// check that next arg is available.
@@ -119,7 +119,7 @@ ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _confi
 					std::format(" ERROR: Unable to process, supplied outpfile type not supported.\n These are allowed extensions: {}.\n Use --help for more options.", File::AllowedExtensions())
 				};
 
-				std::cerr << _message;
+				std::cerr << _message << std::endl;
 				return ConfigBuilder::Status::Failed;
 			}
 		}
@@ -130,22 +130,22 @@ ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _confi
 
 ConfigBuilder::Status ConfigBuilder::Formats (const std::string _arg, Config& _configRef) {
 	// set mode to drawing ascii charachters by
-	_configRef.writeFormat = TransformConfig::WriteFormat::asciiDraw;
+	_configRef.writeFormat = Options::WriteFormat::asciiDraw;
 	// this if doesn't change function of last line, it's just for symmetry :) 
 	if (_arg == "--ascii-draw") {
-		_configRef.writeFormat = TransformConfig::WriteFormat::asciiDraw;
+		_configRef.writeFormat = Options::WriteFormat::asciiDraw;
 	}
 	// set mode to writing hexadecimal.
 	if (_arg == "--hex") {
-		_configRef.writeFormat = TransformConfig::WriteFormat::hexadecimal;
+		_configRef.writeFormat = Options::WriteFormat::hexadecimal;
 	}
 	// set mode to writing binary.
 	if (_arg == "--binary") {
-		_configRef.writeFormat = TransformConfig::WriteFormat::binary;
+		_configRef.writeFormat = Options::WriteFormat::binary;
 	}
 	// set mode to writing utf-8.
 	if (_arg == "--utf8") {
-		_configRef.writeFormat = TransformConfig::WriteFormat::utf8;
+		_configRef.writeFormat = Options::WriteFormat::utf8;
 	}
 	// mode will always be set by default.
 	return ConfigBuilder::Status::Completed;
@@ -162,18 +162,17 @@ ConfigBuilder::Status ConfigBuilder::ValidateConfig (Config& _configRef) {
 		std::string _defaultFileName {_configRef.sourceFile.BaseName() + "-transformed" + _configRef.sourceFile.Extension()};
 		bool _valid = _configRef.outputFile.ParseRawFileName(_defaultFileName);
 		if (!_valid) {
-
 			std::cerr << std::format(" Something went wrong, unable to generate default output filename.\n {} is not a valid file type.", _defaultFileName) << std::endl;
 			return ConfigBuilder::Status::Failed;
 		}
-		std::cout << std::format(" Using output file name: {}", _configRef.outputFile.FileName());
+		std::cout << std::format(" Using output file name: {}", _configRef.outputFile.FileName()) << std::endl;
 	}
 
 	if (!_configRef.sourceFile.VerifySupportedExtension(_configRef.sourceFile.Extension())) {
 		return ConfigBuilder::Status::Failed;
 	}
 
-	if (!_configRef.outputFile.VerifySupportedExtension(_configRef.output.Extension())) {
+	if (!_configRef.outputFile.VerifySupportedExtension(_configRef.outputFile.Extension())) {
 		return ConfigBuilder::Status::Failed;
 	}
 	return ConfigBuilder::Status::Completed;

@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "Options.h"
+#include "Config.hpp"
 
 Options::WriteFormat Options::ParseInt (const int _value) {
 	// check if value is above supported range.

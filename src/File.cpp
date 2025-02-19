@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "File.h"
+#include "File.hpp"
 
 bool File::ParseRawFileName (const std::string _rawFileName) {
 	int _delimiterPos = _rawFileName.find('.');

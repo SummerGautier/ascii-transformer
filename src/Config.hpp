@@ -1,19 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "File.h"
-
-// contains the configuration for the program.
-struct Config {
-	// input and output files created on the stack.
-	File sourceFile {};
-	File outputFile {};
-
-	// captures output writing TransformConfig.
-	Options::WriteFormat writeFormat {
-		Options::WriteFormat::asciiDraw
-	};
-};
+#include "File.hpp"
 
 // options for text transformation.
 namespace Options {
@@ -39,3 +27,14 @@ namespace Options {
 	int MinWriteFormat ();
 };
 
+// contains the configuration for the program.
+struct Config {
+	// input and output files created on the stack.
+	File sourceFile {};
+	File outputFile {};
+
+	// captures output writing TransformConfig.
+	Options::WriteFormat writeFormat {
+		Options::WriteFormat::asciiDraw
+	};
+};
