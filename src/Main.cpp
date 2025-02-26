@@ -4,7 +4,13 @@
 #include "ConfigBuilder.hpp"
 #include "ArgumentParser.hpp"
 
+#include <fstream>
+
 int main (int _argCount, char* _argVector[]) {
+	/**
+	 * Read in Configuration
+	 **/
+
 	Config _config {};
 	ConfigBuilder _configBuilder {};
 	ArgumentParser _parser {_argCount, _argVector};
@@ -12,4 +18,5 @@ int main (int _argCount, char* _argVector[]) {
 	if (!_configBuilder.Build (_config, _parser)) {
 		return EXIT_FAILURE;
 	}
+
 }
