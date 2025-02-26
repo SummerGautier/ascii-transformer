@@ -6,46 +6,43 @@
 
 #include "Config.hpp"
 #include "ConfigBuilder.hpp"
+#include "ArgumentParser.hpp"
 
-bool ConfigBuilder::Build (Config& _configRef, int _argCount, char* _argVector[]) {
+bool ConfigBuilder::Build (Config& _configRef, ArgumentParser& _parserRef) {
+	bool _reading = _parserRef.HasNext();
 	// continue reading args until index reaches arg.
-	for (int _index {0}; _index < _argCount; _index++) {
+	while (_reading) {
 
-		std::string _arg = ExtractArg(_index, _argVector);
-
-		if (Help(_arg) == ConfigBuilder::Status::Completed) {
+		if (Help(_parserRef) == ConfigBuilder::Status::Completed) {
 			// exit program if help screen was displayed.
 			std::exit(EXIT_SUCCESS);
 		}
-		if (Source(_arg, _configRef, _index, _argVector, _argCount) == ConfigBuilder::Status::Failed) {
+		if (Source(_configRef, _parserRef) == ConfigBuilder::Status::Failed) {
 			// exit program if error processing source file arg.
 			return false;
 		}
-		if (Out(_arg, _configRef, _index, _argVector, _argCount) == ConfigBuilder::Status::Failed) {
+		if (Out(_configRef, _parserRef) == ConfigBuilder::Status::Failed) {
 			//exit program if error processing output file arg.
 			return false;
 		}
-		if (Formats(_arg, _configRef) == ConfigBuilder::Status::Failed) {
+		if (Formats(_configRef, _parserRef) == ConfigBuilder::Status::Failed) {
 			// exit program if format could not be set.
 			return false;
+		}
+
+		if (_parserRef.HasNext()) {
+			_parserRef.Next();
+		} else {
+			_reading = false;
 		}
 	}
 	// return true of config is valid.
 	return (ValidateConfig(_configRef) == ConfigBuilder::Status::Completed);
 }
 
-std::string ConfigBuilder::ExtractArg (int _index, char* _argVector[]) {
-	// ensure we are not running past argument max.
-	if (_index > ConfigBuilder::MaxAllowedArgs) {
-		throw std::runtime_error("maximum argument count exceeded.");
-	}
-	// get current argument.
-	return _argVector[_index];
-}
-
-ConfigBuilder::Status ConfigBuilder::Help (const std::string _arg) {
+ConfigBuilder::Status ConfigBuilder::Help (ArgumentParser& _parserRef) {
 	// display help options if help arg sent.
-	if (_arg == "--help") {
+	if (_parserRef.Current().second == "--help") {
 		// generate help message.
 		std::string _helpMessage {
 			" -- TextTransform HELP --\n"
@@ -65,18 +62,16 @@ ConfigBuilder::Status ConfigBuilder::Help (const std::string _arg) {
 	return ConfigBuilder::Status::None;
 }
 
-ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _configRef, int& _index, char* _argVector[], int _argCount) {
+ConfigBuilder::Status ConfigBuilder::Source (Config& _configRef, ArgumentParser& _parserRef) {
 	// set source file if it is a source file.
-	if (_arg == "--src") {
+	if (_parserRef.Current().second == "--src") {
 		// check that next arg is available.
-		if (_index+1 >= _argCount) {
+		if (!_parserRef.HasNext()) {
 			std::cerr << "ERROR: Unable to continue. Source file was not provided. Use --help for more options." << std::endl;
 			return ConfigBuilder::Status::Failed;
 		}
-		// since next arg is availble, move 'pointer' forward.
-		++_index;
 		// read in raw file name.
-		std::string _rawFileName = _argVector[_index];
+		std::string _rawFileName = _parserRef.Next();
 		// parse raw file name to update source file.
 		bool _supportedExtension = _configRef.sourceFile.ParseRawFileName(_rawFileName);
 		if (!_supportedExtension) {
@@ -93,11 +88,11 @@ ConfigBuilder::Status ConfigBuilder::Source (const std::string _arg, Config& _co
 	return ConfigBuilder::Status::None;
 }
 
-ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _configRef, int& _index, char*_argVector[], int _argCount) {
+ConfigBuilder::Status ConfigBuilder::Out (Config& _configRef, ArgumentParser& _parserRef) {
 	// set source file if it is a source file.
-	if (_arg == "--out") {
+	if (_parserRef.Current().second == "--out") {
+		if (!_parserRef.HasNext()) {
 		// check that next arg is available.
-		if (_index+1 >= _argCount) {
 			std::cout << "--out flag was recieved without filename. Use default filename? [Y/n] ";
 			std::string _useDefault {};
 			std::cin >> _useDefault;
@@ -107,10 +102,8 @@ ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _confi
 			} 
 			std::cout << "Resuming." << std::endl;
 		} else {
-			// since next arg is availble, move 'pointer' forward.
-			++_index;
 			// read in raw file name.
-			std::string _rawFileName = _argVector[_index];
+			std::string _rawFileName = _parserRef.Next();
 			// parse raw file name to update source file.
 			bool _supportedExtension = _configRef.outputFile.ParseRawFileName(_rawFileName);
 			if (!_supportedExtension) {
@@ -128,23 +121,21 @@ ConfigBuilder::Status ConfigBuilder::Out (const std::string _arg, Config& _confi
 	return ConfigBuilder::Status::None;
 }
 
-ConfigBuilder::Status ConfigBuilder::Formats (const std::string _arg, Config& _configRef) {
-	// set mode to drawing ascii charachters by
-	_configRef.writeFormat = Options::WriteFormat::asciiDraw;
-	// this if doesn't change function of last line, it's just for symmetry :) 
-	if (_arg == "--ascii-draw") {
+ConfigBuilder::Status ConfigBuilder::Formats (Config& _configRef, ArgumentParser& _parserRef) {
+
+	if (_parserRef.Current().second == "--ascii-draw") {
 		_configRef.writeFormat = Options::WriteFormat::asciiDraw;
 	}
 	// set mode to writing hexadecimal.
-	if (_arg == "--hex") {
+	if (_parserRef.Current().second  == "--hex") {
 		_configRef.writeFormat = Options::WriteFormat::hexadecimal;
 	}
 	// set mode to writing binary.
-	if (_arg == "--binary") {
+	if (_parserRef.Current().second  == "--binary") {
 		_configRef.writeFormat = Options::WriteFormat::binary;
 	}
 	// set mode to writing utf-8.
-	if (_arg == "--utf8") {
+	if (_parserRef.Current().second  == "--utf8") {
 		_configRef.writeFormat = Options::WriteFormat::utf8;
 	}
 	// mode will always be set by default.
