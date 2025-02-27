@@ -1,53 +1,56 @@
+7 #Height
+11 #Width
+
 63
-  ????
-??    ??
-??    ??
-    ??
-   ??
-  ??
-  ..
+  ?????    
+??     ??  
+??     ??  
+     ??    
+   ??      
+           
+   ..      
 
 97
-     a
-    aaa
-   aaaaa
-  aa   aa
- aa     aa
+     a     
+    aaa    
+   aaaaa   
+  aa   aa  
+ aa     aa 
 aaaaaaaaaaa
 aaa     aaa
 
 98
-bbbbbbbb
-b       b
-b       bb
-bbbbbbbb
-b       b
-b       bb
-bbbbbbbbb
+bbbbbbbbb  
+b        bb
+b        bb
+bbbbbbbbb  
+b        bb
+b        bb
+bbbbbbbbbb 
 
 99
-  cccccc
-cc      cc
-cc
-cc
-cc
-cc      cc
-  cccccc
+  cccccccc 
+cc       cc
+cc         
+cc         
+cc         
+cc       cc
+  ccccccc  
 
 100
-dddddddd
-dd      dd
-dd       d
-dd       d
-dd       d
-dd      dd
-dddddddd
+ddddddddd  
+dd       dd
+dd        d
+dd        d
+dd        d
+dd       dd
+ddddddddd  
 
 101
-eeeeeeeeee
-ee      ee
-ee
-eeeeeee
-ee
-ee      ee
-eeeeeeeeee
+eeeeeeeeeee
+ee       ee
+ee         
+eeeeeeee   
+ee         
+ee       ee
+eeeeeeeeeee
