@@ -1,10 +1,9 @@
 #include <cstdint>
 
-#include "Config.hpp"
-#include "ConfigBuilder.hpp"
-#include "ArgumentParser.hpp"
+#include "Configuration/Config.hpp"
 
 #include <fstream>
+#include <iostream>
 
 int main (int _argCount, char* _argVector[]) {
 	/**
@@ -12,11 +11,49 @@ int main (int _argCount, char* _argVector[]) {
 	 **/
 
 	Config _config {};
-	ConfigBuilder _configBuilder {};
-	ArgumentParser _parser {_argCount, _argVector};
-	// fail early if config builder is unable to complete.
-	if (!_configBuilder.Build (_config, _parser)) {
+	if (!_config.Complete(_argCount, _argVector)) {
+		std::cerr << "Unable to process configuration." << std::endl;
 		return EXIT_FAILURE;
 	}
 
+
+	/**
+	 * Write Transform to Output File
+	 **/
+
+
+	//open input and output streams.
+	std::ifstream _ifstream {
+		_config.sourceFile.FileName(),
+		std::ios::in
+	};
+
+	if (!_ifstream.is_open()) {
+		throw std::runtime_error("Unable to open file.");
+	}
+
+	char _current {' '};
+
+	while (!_ifstream.eof()) {
+
+		if (_ifstream.bad()) {
+			throw std::runtime_error("I/O error while rading.");
+		}
+		if (_ifstream.fail()) {
+			throw std::runtime_error("Corrupted data encountered.");
+		}
+
+		_current = _ifstream.get();
+
+		if (!_ifstream.eof()) {
+			std::cout << _current << std::endl;
+		}
+	}
+
+
+	// read in input file one charachter at a time.
+	// for each charachter
+		// calculate transform
+		// write the transform to the output
+	// close input and output streams.
 }

@@ -29,6 +29,10 @@ namespace Options {
 
 // contains the configuration for the program.
 struct Config {
+
+	// read input from the command line and fill config data.
+	bool Complete (int _argCount, char* _argVector[]);
+
 	// input and output files created on the stack.
 	File sourceFile {};
 	File outputFile {};

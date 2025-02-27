@@ -2,7 +2,7 @@
 #include <utility>
 #include <stdexcept>
 
-ArgumentParser::ArgumentParser (int _argCount, char** _argVector)
+ArgumentParser::ArgumentParser (int _argCount, char* _argVector[])
   : argCount(_argCount), argVector(_argVector) {
   // automatically collect first argument at index 0.
   this->index = 0;
