@@ -84,11 +84,11 @@ hh       hh
 
 105
 iiiiiiiiiii
-    iii    
-    iii    
-    iii    
-    iii    
-    iii    
+    ii     
+    ii     
+    ii     
+    ii     
+    ii     
 iiiiiiiiiii
 
 106
@@ -98,4 +98,49 @@ iiiiiiiiiii
        jj  
        jj  
 jj     jj  
-jjjjjjjjj   
+jjjjjjjjj  
+
+107
+k       kk 
+kk      kk 
+kk      k  
+kkkkkkk    
+kk     kk  
+kk      kk 
+kk       kk
+
+108
+ll         
+ll         
+ll         
+ll         
+ll         
+ll      lll
+lllllllllll
+
+109
+mmmm   mmmm
+mm  m m  mm
+mm   m   mm
+mm   m   mm
+mm       mm
+mm       mm
+m         m
+
+110
+nnnn     nn
+nn  n     n
+nn   n    n
+nn    n   n
+nn     n  n
+nn      n n
+nn       nn
+
+111
+  ooooooo  
+oo       oo
+oo       oo
+oo       oo
+oo       oo
+oo       oo
+  ooooooo  
