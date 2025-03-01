@@ -4,12 +4,17 @@
 #include "../Configuration/Config.hpp"
 #include "../Formatter/IFormatter.hpp"
 #include "../Formatter/AsciiDraw.hpp"
+#include "../Formatter/HexFormatter.hpp"
 
 #include "Transform.hpp"
 
 void Transform::InitTransform (IFormatter*& _formatterPtrRef, Config& _configRef) {
 	if (_configRef.writeFormat == Options::WriteFormat::asciiDraw) {
 		_formatterPtrRef = new AsciiDraw();
+		return;
+	}
+	if (_configRef.writeFormat == Options::WriteFormat::hexadecimal) {
+		_formatterPtrRef = new HexFormatter();
 	}
 }
 
