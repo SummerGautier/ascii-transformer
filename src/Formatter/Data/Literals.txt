@@ -1,0 +1,101 @@
+7 #Height
+11 #Width
+
+63
+  ?????    
+??     ??  
+??     ??  
+     ??    
+   ??      
+           
+   ..      
+
+97
+     a     
+    aaa    
+   aaaaa   
+  aa   aa  
+ aa     aa 
+aaaaaaaaaaa
+aaa     aaa
+
+98
+bbbbbbbbb  
+b        bb
+b        bb
+bbbbbbbbb  
+b        bb
+b        bb
+bbbbbbbbbb 
+
+99
+  cccccccc 
+cc       cc
+cc         
+cc         
+cc         
+cc       cc
+  ccccccc  
+
+100
+ddddddddd  
+dd       dd
+dd        d
+dd        d
+dd        d
+dd       dd
+ddddddddd  
+
+101
+eeeeeeeeeee
+ee       ee
+ee         
+eeeeeeee   
+ee         
+ee       ee
+eeeeeeeeeee
+
+102
+fffffffffff
+ff         
+ff         
+ffffffff   
+ff         
+ff         
+ff         
+
+103
+  gggggggg 
+gg       gg
+gg         
+gg    ggggg
+gg        g
+gg        g
+  ggggggggg
+
+104
+hh       hh
+hh       hh
+hh       hh
+hhhhhhhhhhh
+hh       hh
+hh       hh
+hh       hh
+
+105
+iiiiiiiiiii
+    iii    
+    iii    
+    iii    
+    iii    
+    iii    
+iiiiiiiiiii
+
+106
+  jjjjjjjjj
+       jj  
+       jj  
+       jj  
+       jj  
+jj     jj  
+jjjjjjjjj   

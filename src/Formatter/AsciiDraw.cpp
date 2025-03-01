@@ -29,27 +29,27 @@ AsciiDraw::AsciiDraw () {
   }
 }
 
-void AsciiDraw::ReadHeader (std::ifstream& _file) {
+void AsciiDraw::ReadHeader (std::ifstream& _fileRef) {
   // validate that we are not at the end of file.
-  if (_file.eof()) {
+  if (_fileRef.eof()) {
     throw std::ios_base::failure("\n Fatal: Unable to read ascii header information, end of file encountered");
   }
   // height is first line of literals file.
   std::string _line {};
-  std::getline(_file, _line);
+  std::getline(_fileRef, _line);
   this->fontHeight = std::stoi(_line);
   // width is second line of literals file.
-  std::getline(_file, _line);
+  std::getline(_fileRef, _line);
   this->fontWidth = std::stoi(_line);
   // validate that stream is still alive.
-  if (_file.fail()) {
+  if (_fileRef.fail()) {
     throw std::ios_base::failure("\n Fatal: File stream corrupted reading ascii reference header information.");
   }
 }
 
-void AsciiDraw::ReadLiterals (std::ifstream& _file) {
+void AsciiDraw::ReadLiterals (std::ifstream& _fileRef) {
   // validate that we are not at the end of the file.
-  if (_file.eof()) {
+  if (_fileRef.eof()) {
     throw std::ios_base::failure("\n Fatal: Unable to read ascii image reference, end of file encountered.");
   }
   // _newline is false if the last line was not a newline.
@@ -59,7 +59,7 @@ void AsciiDraw::ReadLiterals (std::ifstream& _file) {
   int _key {0};
   std::string _line {};
   // now that header was parsed, read the content.
-  while (std::getline(_file, _line)) {
+  while (std::getline(_fileRef, _line)) {
     if (_newline) {
       // if last line was a newline:
       _newline = false;
@@ -70,12 +70,10 @@ void AsciiDraw::ReadLiterals (std::ifstream& _file) {
       // store decimal:image-vector pair to dictionary.
       std::pair<int, std::vector<std::string>>  _pair { _key, _value };
       this->dictionary.insert(_pair);
-    }
-    if (_line.size() == 0) {
+    } else if (_line.size() == 0) {
       // if current line is a newline:
       _newline = true;
-    }
-    if (_line.size() > 0) {
+    } else if (_line.size() > 0) {
       // line is a row of an image for the current key.
       // add row to the image vector for the key.
       this->dictionary.at(_key).push_back(_line);
@@ -100,20 +98,48 @@ void AsciiDraw::Store (const char _value) {
 
   // enter key into the buffer.
   this->buffer.push_back(_key);
-  std::cout << _value;
 }
 
-void AsciiDraw::Flush (std::ofstream& _outStream) {
-  for (int _row = 0; _row <= this->fontHeight; ++_row) {
+void AsciiDraw::Flush (std::ofstream& _outStreamRef) {
+
+  if (!_outStreamRef.is_open()) {
+    throw std::ios_base::failure("Fatal: Flush called but output stream if closed.");
+  }
+
+  /**
+   * Since each letter has multiple layers, we have to write the same layer simultaneously for the rows.
+   * Example: ACE ->
+   *   a   cccc eeee # has to be printed 1st.
+   *  aaa  c    ee   # has to be printed 2nd.
+   * a   a cccc eeee # has to be printed 3rd.
+   *
+   *
+   * The buffer index contains the ascii number of each letter. ACE = [97, 99, 101]
+   * The letter images have the same number of rows (fontHeight) and cols (fontWidth);
+   *
+   * To print them in the right order per layer, we do the following:
+   * For each row:
+   *    For each letter
+   *      Get the image vector for that letter.
+   *      Get the row of the letter's image equal to the current overall row we're printing.
+   *      Print that row without a newline.
+   *    At the end of the row, print the newline.
+   * This will print the letters layer by layer next to eachother.
+   * **/
+
+  for (int _row = 0; _row < this->fontHeight; ++_row) {
     for (int _col = 0; _col < this->buffer.size(); ++_col) {
         int _key = this->buffer.at(_col);
         if (_key != int('\n')) {
           std::vector<std::string> _image = this->dictionary.at(_key);
-          std::cout << _image.at(_row) << "   ";
+          _outStreamRef << _image.at(_row) << "   ";
+        }
+        if (_outStreamRef.fail()) {
+          throw std::ios_base::failure("Fatal: can't continue writing to output file.");
         }
     }
-    std::cout << '\n';
+    _outStreamRef << '\n';
   }
-  std::cout << std::endl;
+  _outStreamRef << std::endl;
   this->buffer.clear();
 }

@@ -15,7 +15,7 @@ public:
   // throws error if last value is a new_line (not flushed).
   void Store (const char _value) override;
   // writes to outstream layer by layer.
-  void Flush (std::ofstream& _outStream) override;
+  void Flush (std::ofstream& _outStreamRef) override;
 
 private:
   // default key for unsupported chars.
@@ -30,7 +30,7 @@ private:
   // filename of where the literals are stored.
   const std::string referenceFile {"src/Formatter/Data/Literals.txt"};
   // read header information from ascii image reference file.
-  void ReadHeader (std::ifstream& _file);
+  void ReadHeader (std::ifstream& _fileRef);
   // read image vectors from reference file.
-  void ReadLiterals (std::ifstream& _file);
+  void ReadLiterals (std::ifstream& _fileRef);
 };

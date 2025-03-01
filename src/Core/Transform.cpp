@@ -36,6 +36,6 @@ void Transform::ExecuteTransform (std::ifstream& _ifstreamRef, std::ofstream& _o
 	}
 
 	_formatterRef.Flush(_ofstreamRef);
-	std::cout << std::endl;
+	std::cout << "Completed." << std::endl;
 }
 
