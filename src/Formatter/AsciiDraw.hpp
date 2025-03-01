@@ -5,9 +5,9 @@
 #include <string>
 #include <map>
 
-#include "ITransform.hpp"
+#include "IFormatter.hpp"
 
-class AsciiDraw : public ITransform {
+class AsciiDraw : public IFormatter {
 public:
   // read-in literals to dictionary.
   AsciiDraw ();
@@ -18,10 +18,17 @@ public:
   void Flush (std::ofstream& _outStream) override;
 
 private:
+  // standard height of ascii image.
+  int fontWidth {0};
+  int fontHeight {0};
   // holds in-process references to literal orders.
   std::vector<int> buffer {};
   // holds references to literal set.
   std::map<int,std::vector<std::string>> dictionary {};
   // filename of where the literals are stored.
-  const std::string referenceFile {"src/Transform/Data/Literals.txt"};
+  const std::string referenceFile {"src/Formatter/Data/Literals.txt"};
+  // read header information from ascii image reference file.
+  void ReadHeader (std::ifstream& _file);
+  // read image vectors from reference file.
+  void ReadLiterals (std::ifstream& _file);
 };
