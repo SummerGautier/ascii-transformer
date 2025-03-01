@@ -1,6 +1,15 @@
 7 #Height
 11 #Width
 
+46
+           
+           
+           
+           
+    ..     
+   ....    
+    ..     
+
 63
   ?????    
 ??     ??  
@@ -144,3 +153,102 @@ oo       oo
 oo       oo
 oo       oo
   ooooooo  
+
+112
+ppppppppp  
+pp       pp
+pp       pp
+ppppppppp  
+pp         
+pp         
+pp         
+
+113
+  qqqqqqq  
+qq       qq
+qq       qq
+qq    q  qq
+qq     q q 
+  qqqqq q  
+          q
+
+114
+rrrrrrrr   
+rr      rr 
+rr      r  
+rrrrrrrr   
+rr     rr  
+rr      rr 
+rr       rr
+
+115
+ sssssssss 
+ss       ss
+ss         
+  sssssss  
+         ss
+ss       ss
+ sssssssss 
+
+116
+ttttttttttt
+    tt     
+    tt     
+    tt     
+    tt     
+    tt     
+   tttt    
+
+117
+u         u
+uu       uu
+uu       uu
+uu       uu
+uu       uu
+ uu     uu 
+   uuuuu   
+
+118
+v        v 
+v        v 
+vv      vv 
+ vv    vv  
+  vv  vv   
+   v  v    
+    vv     
+
+119
+ww       ww
+ww       ww
+ww       ww
+ww   w   ww
+ww   w   ww
+ww  w w  ww
+wwww   wwww
+
+120
+xxx     xxx
+   x   x   
+    x x    
+     x     
+    x x    
+   x   x   
+xxx     xxx
+
+121
+yy       yy
+ yy     yy 
+  yy    y  
+   yy  y   
+    yyy    
+y   yy     
+ yyy       
+
+122
+zzzzzzzzzzz
+zz      zz 
+       zz  
+     zz    
+   zz      
+ zz     zz 
+zzzzzzzzzz 
