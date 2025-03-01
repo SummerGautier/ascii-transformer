@@ -28,7 +28,6 @@ void Transform::ExecuteTransform (std::ifstream& _ifstreamRef, std::ofstream& _o
 		_current = _ifstreamRef.get();
 
 		if (!_ifstreamRef.eof()) {
-			std::cout << _current << std::endl;
 			_formatterRef.Store(_current);
 			if (_current == '\n') {
 				_formatterRef.Flush(_ofstreamRef);
@@ -37,5 +36,6 @@ void Transform::ExecuteTransform (std::ifstream& _ifstreamRef, std::ofstream& _o
 	}
 
 	_formatterRef.Flush(_ofstreamRef);
+	std::cout << std::endl;
 }
 

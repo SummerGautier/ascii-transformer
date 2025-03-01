@@ -18,6 +18,8 @@ public:
   void Flush (std::ofstream& _outStream) override;
 
 private:
+  // default key for unsupported chars.
+  const int defaultKey {63};
   // standard height of ascii image.
   int fontWidth {0};
   int fontHeight {0};

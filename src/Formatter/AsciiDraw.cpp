@@ -84,25 +84,26 @@ void AsciiDraw::ReadLiterals (std::ifstream& _file) {
 }
 
 void AsciiDraw::Store (const char _value) {
-  std::cout << "store" << std::endl;
-  // if buffer.top() == newline
-    // throw exception
-  // get ascii value
-  // if key in dict()
-    // buffer.append(key)
-  // else
-    // buffer.append(default)
-  return;
+  // store should not be called if a line is not flushed.
+  if (this->buffer.size() > 0 && this->buffer.back() == int('\n')) {
+    std::cerr << "Store was called but newline was detected." << std::endl;
+    throw std::runtime_error("Flush must be called on last line before storing.");
+  }
 
+  // key should be integer of charachter.
+  int _key = int(_value);
+
+  // if key does not have a literal, use default.
+  if (!this->dictionary.contains(_key)) {
+    _key = this->defaultKey;
+  }
+
+  // enter key into the buffer.
+  this->buffer.push_back(_key);
+  std::cout << _value;
 }
 
 void AsciiDraw::Flush (std::ofstream& _outStream) {
-  std::cout << "flush" << std::endl;
-  // for int row = 0; row < 7
-      // for int letterRef in buffer
-          // std::string line = dictionary.get(letterRef).get(row);
-          // out << line
-      // out << newline
-  // out << newline
-  return;
+
+  this->buffer.clear();
 }
