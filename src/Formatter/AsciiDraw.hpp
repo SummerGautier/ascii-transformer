@@ -33,4 +33,6 @@ private:
   void ReadHeader (std::ifstream& _fileRef);
   // read image vectors from reference file.
   void ReadLiterals (std::ifstream& _fileRef);
+  // calculates spacer image based on font width and height.
+  void AddSpacer ();
 };

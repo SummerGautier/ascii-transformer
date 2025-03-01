@@ -4,7 +4,8 @@
 #include <vector>
 #include <utility>
 #include <string>
-
+#include <algorithm>
+#include <cctype>
 #include "AsciiDraw.hpp"
 
 AsciiDraw::AsciiDraw () {
@@ -79,6 +80,18 @@ void AsciiDraw::ReadLiterals (std::ifstream& _fileRef) {
       this->dictionary.at(_key).push_back(_line);
     }
   }
+
+  this->AddSpacer();
+}
+
+void AsciiDraw::AddSpacer () {
+  std::vector<std::string> _image {};
+  for (int i = 0; i < this->fontHeight; i++) {
+    std::string _row(this->fontWidth/2, ' ');
+    _image.push_back(_row);
+  }
+  std::pair<int, std::vector<std::string>> _pair {' ', _image};
+  this->dictionary.insert(_pair);
 }
 
 void AsciiDraw::Store (const char _value) {
@@ -140,6 +153,9 @@ void AsciiDraw::Flush (std::ofstream& _outStreamRef) {
     }
     _outStreamRef << '\n';
   }
-  _outStreamRef << std::endl;
+
+  // print out line height spacer.
+  _outStreamRef << std::string(this->fontHeight, '\n');
+
   this->buffer.clear();
 }
