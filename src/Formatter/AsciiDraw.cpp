@@ -91,10 +91,10 @@ void AsciiDraw::Store (const char _value) {
   }
 
   // key should be integer of charachter.
-  int _key = int(_value);
+  int _key = int(std::tolower(_value));
 
   // if key does not have a literal, use default.
-  if (!this->dictionary.contains(_key)) {
+  if (!this->dictionary.contains(_key) && _value != '\n') {
     _key = this->defaultKey;
   }
 
@@ -104,6 +104,16 @@ void AsciiDraw::Store (const char _value) {
 }
 
 void AsciiDraw::Flush (std::ofstream& _outStream) {
-
+  for (int _row = 0; _row <= this->fontHeight; ++_row) {
+    for (int _col = 0; _col < this->buffer.size(); ++_col) {
+        int _key = this->buffer.at(_col);
+        if (_key != int('\n')) {
+          std::vector<std::string> _image = this->dictionary.at(_key);
+          std::cout << _image.at(_row) << "   ";
+        }
+    }
+    std::cout << '\n';
+  }
+  std::cout << std::endl;
   this->buffer.clear();
 }
