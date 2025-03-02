@@ -1,5 +1,5 @@
 ## Ascii Text Transformer
-
+![image](ascii-example.png)
 ### About
     
 Using text transformer cli tool, you can transformer a text input file into various formats:
@@ -28,7 +28,7 @@ After building from source, the following is an example of usage for an ascii dr
 ## Manual
 This section goes over the supported formats and how to invoke them, as well as things to keep in mind about each translation type.
 ### Ascii Draw (Default)
-If not formatter type is specified, ascii-draw is the default. Here is an example command:
+If no formatter type is specified, ascii-draw is the default. Here is an example command:
 ```
  ./transform.exe --src my-text.txt --out destination.txt --ascii-draw 
  ```
