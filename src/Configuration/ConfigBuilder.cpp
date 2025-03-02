@@ -134,10 +134,6 @@ ConfigBuilder::Status ConfigBuilder::Formats (Config& _configRef, ArgumentParser
 	if (_parserRef.Current().second  == "--binary") {
 		_configRef.writeFormat = Options::WriteFormat::binary;
 	}
-	// set mode to writing utf-8.
-	if (_parserRef.Current().second  == "--utf8") {
-		_configRef.writeFormat = Options::WriteFormat::utf8;
-	}
 	// mode will always be set by default.
 	return ConfigBuilder::Status::Completed;
 }

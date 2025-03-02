@@ -8,7 +8,6 @@ namespace Options {
 	// what format to use for output file when transforming text.
 	enum class WriteFormat {
 		asciiDraw,
-		utf8,
 		binary,
 		hexadecimal
 	};
@@ -17,7 +16,6 @@ namespace Options {
 		WriteFormat::hexadecimal,
 		WriteFormat::asciiDraw,
 		WriteFormat::binary,
-		WriteFormat::utf8,
 	};
 	// process parsing itneger to a WriteFormat.
 	WriteFormat ParseInt (const int _value);

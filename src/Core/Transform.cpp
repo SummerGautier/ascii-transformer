@@ -5,6 +5,7 @@
 #include "../Formatter/IFormatter.hpp"
 #include "../Formatter/AsciiDraw.hpp"
 #include "../Formatter/HexFormatter.hpp"
+#include "../Formatter/BinaryFormatter.hpp"
 
 #include "Transform.hpp"
 
@@ -15,6 +16,9 @@ void Transform::InitTransform (IFormatter*& _formatterPtrRef, Config& _configRef
 	}
 	if (_configRef.writeFormat == Options::WriteFormat::hexadecimal) {
 		_formatterPtrRef = new HexFormatter();
+	}
+	if (_configRef.writeFormat == Options::WriteFormat::binary) {
+		_formatterPtrRef = new BinaryFormatter();
 	}
 }
 
