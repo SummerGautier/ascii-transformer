@@ -50,7 +50,7 @@ ConfigBuilder::Status ConfigBuilder::Help (ArgumentParser& _parserRef) {
 			" # OPTIONS: \n"
 			" --src <filename> (required)\n"
 			" [--out <filename>]\n" 
-			" [--asciiDraw (default) | hex | binary | utf8]\n"
+			" [--ascii-draw (default) | --hex | --binary]\n"
 			" [--help]\n"
 		};
 		// write to console.
